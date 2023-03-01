@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 
-
+///<summary>
+///teste
+///</summary>
 public class WeatherForecastController : BaseApiController
 {
     private static readonly string[] Summaries = new[]
