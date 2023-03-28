@@ -34,7 +34,6 @@ export class AccountService {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUserSource.next(user); // envia um evento contendo o objeto "user" para todos os observadores inscritos no "Subject" "currentUserSource"
         }
-
       })
 
     )
