@@ -16,7 +16,7 @@ export class NavComponent {
  
   constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService){}
 
-  ngOnInit(){
+  ngOnInit(): void{
   }
 
   
@@ -32,5 +32,6 @@ export class NavComponent {
 
   logout(){
     this.accountService.logout();
+    this.router.navigateByUrl('/')
   }
 }

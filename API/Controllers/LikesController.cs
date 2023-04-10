@@ -15,19 +15,18 @@ namespace API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly ILikeRepository _likeRepository;
+        private readonly IUnitOfWork _uow;
 
-        public LikesController(IUserRepository userRepository, ILikeRepository likeRepository)
+        public LikesController(IUnitOfWork uow)
         {
-            _likeRepository = likeRepository;
-            _userRepository = userRepository;
-               
+            _uow = uow;
         }
         [HttpPost("{username}")]
         public async Task<ActionResult> AddLike(string username)
         {
             var sourceUserId = User.GetUserId();
-            var likedUser = await _userRepository.GetUserByUsernameAsync(username);
-            var sourceUser = await _likeRepository.GetUserWithLikes(sourceUserId);
+            var likedUser = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            var sourceUser = await _uow.LikesRepository.GetUserWithLikes(sourceUserId);
 
             if (likedUser == null) return NotFound();
 
@@ -45,7 +44,7 @@ namespace API.Controllers
 
             sourceUser.LikedUsers.Add(userLike);
 
-            if (await _userRepository.SaveAllAsync()) return Ok();
+            if (await _uow.Complete()) return Ok();
 
             return BadRequest("Failed to like user");
         }   
