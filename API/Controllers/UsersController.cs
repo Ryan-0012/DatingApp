@@ -28,7 +28,7 @@ namespace API.Controllers
             _mapper = mapper;
             _userRepository = userRepository;
         }
-        [AllowAnonymous]
+      
         [HttpGet]
         public async Task<ActionResult<PagedList<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
         {
@@ -48,8 +48,9 @@ namespace API.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{username}")]
 
+       
+        [HttpGet("{username}")]
         public async Task<ActionResult<MemberDTO>> GetUser(string username)
         {
             return await _userRepository.GetMemberAsync(username);
