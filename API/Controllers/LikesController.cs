@@ -13,8 +13,6 @@ namespace API.Controllers
 {
     public class LikesController : BaseApiController
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ILikeRepository _likeRepository;
         private readonly IUnitOfWork _uow;
 
         public LikesController(IUnitOfWork uow)
@@ -32,7 +30,7 @@ namespace API.Controllers
 
             if (sourceUser.UserName == username) return BadRequest("You cannot like yourself");
 
-            var userLike = await _likeRepository.GetUserLike(sourceUserId, likedUser.Id);
+            var userLike = await _uow.LikesRepository.GetUserLike(sourceUserId, likedUser.Id);
 
             if (userLike != null) return BadRequest("You already like this user");
 
@@ -54,7 +52,7 @@ namespace API.Controllers
         {
             likesParams.UserId = User.GetUserId();   
 
-            var users = await _likeRepository.GetUserLikes(likesParams);
+            var users = await _uow.LikesRepository.GetUserLikes(likesParams);
             
             Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, 
                 users.PageSize, users.TotalCount, users.TotalPages));

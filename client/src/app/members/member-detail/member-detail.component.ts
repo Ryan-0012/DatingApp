@@ -62,6 +62,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     
   }
 
+  ngOnDestroy(): void {
+    this.messageService.stopHubConnection();
+  }
+
   getImages() {
     if(!this.member) return [];
     const imageUrl = [];
@@ -75,16 +79,17 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     return imageUrl;
   }
 
-  ngOnDestroy(): void {
-    this.messageService.stopHubConnection();
-  }
+  
 
   selectTab(heading: string) {
-      this.memberTabs!.tabs!.find(x => x.heading === heading)!.active = true
+    if (this.memberTabs) {
+      this.memberTabs.tabs.find(x => x.heading === heading)!.active = true
+    }
   }
 
   loadMessages() {
     if (this.member) {
+      console.log(this.member.userName);
       this.messageService.getMessageThread(this.member.userName).subscribe({
         next: messages => this.messages = messages
       })

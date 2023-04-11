@@ -32,13 +32,16 @@ namespace API.SignalR
             var group = await AddToGroup(groupName);
             
             await Clients.Group(groupName).SendAsync("UpdateGroup", group);
+            
 
             var messages = await _uow.MessageRepository
                 .GetMessageThread(Context.User.GetUsername(), otherUser);
 
+            var changes = _uow.HasChanges();
+
             if(_uow.HasChanges()) await _uow.Complete();
 
-            await Clients.Caller.SendAsync("ReceivedMessageThread", messages);
+            await Clients.Caller.SendAsync("ReceiveMessageThread", messages);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
